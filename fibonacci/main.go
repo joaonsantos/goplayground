@@ -17,7 +17,7 @@ func compute_recursive(iteration uint64) uint64 {
 
 func fibonacci_recursive(iteration uint64) {
     var iter uint64 = 0
-    for iter < 10 {
+    for iter < iteration {
       fmt.Println(compute_recursive(iter))
       iter++
     }
