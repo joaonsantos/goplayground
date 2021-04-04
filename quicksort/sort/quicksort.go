@@ -1,4 +1,4 @@
-package lib
+package sort
 
 // partition finds correct pivot position in slice s with bounds l(ow) and h(igh)
 // pivot is always the last element of the slice
