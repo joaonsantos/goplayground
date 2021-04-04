@@ -21,16 +21,17 @@ func partition(s []int, l, h int) int {
     }
   }
 
-  s[wall], s[h] = s[h], s[wall]
+  // useful if the array turns out to be already sorted
+  // the pivot should be of a higher value than the wall value before swapping
+  if s[h] < s[wall] {
+    s[wall], s[h] = s[h], s[wall]
+  }
 
   return wall
 }
 
 // function quicksort sorts slice s with bounds l(ow) and h(igh)
 func quicksort(s []int, l, h int){
-  if len(s) == 1 {
-    return
-  }
   if l < h {
     p := partition(s, l, h)
     quicksort(s, l, p)
