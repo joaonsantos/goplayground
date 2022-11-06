@@ -16,7 +16,7 @@ func convulsion(matrix [][]color.RGBA, mask [][]uint8, size int) color.RGBA {
 		b uint32
 		a uint32
 	)
-	div := uint32(size * size)
+
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
 			c := matrix[i][j]
@@ -28,6 +28,8 @@ func convulsion(matrix [][]color.RGBA, mask [][]uint8, size int) color.RGBA {
 			a += uint32(c.A * m)
 		}
 	}
+
+	div := uint32(size * size)
 	return color.RGBA{
 		R: uint8(r / div),
 		G: uint8(g / div),
@@ -40,11 +42,11 @@ func blurPix(src, dst *image.RGBA, mask [][]uint8, maskSize, x, y int) {
 	offset := maskSize / 2
 	b := src.Bounds()
 	if x <= offset || y <= offset || x >= b.Dx()-offset || y >= b.Dy()-offset {
-		// do nothing
+		// At borders do nothing.
 		return
 	}
 
-	// create rgba numbers matrix size of mask
+	// Create rgba numbers matrix size of mask.
 	m := make([][]color.RGBA, maskSize)
 	for i := 0; i < maskSize; i++ {
 		m[i] = make([]color.RGBA, maskSize)
@@ -57,7 +59,7 @@ func blurPix(src, dst *image.RGBA, mask [][]uint8, maskSize, x, y int) {
 		}
 	}
 
-	// do convulsion with mask and save
+	// Do convulsion with mask and save to destination image.
 	rgba := convulsion(m, mask, maskSize)
 	dst.SetRGBA(x, y, rgba)
 }
@@ -84,13 +86,14 @@ func main() {
 	}
 	f.Close()
 
+	// Initialize both source and destination images.
 	b := img.Bounds()
 	src := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
 	dst := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
-
 	draw.Draw(src, src.Bounds(), img, b.Min, draw.Src)
 	draw.Draw(dst, dst.Bounds(), img, b.Min, draw.Src)
 
+	// Create mask which results in blur effect.
 	maskSize := 3
 	if args := os.Args; len(os.Args) > 1 {
 		maskSize, err = strconv.Atoi(args[1])
@@ -99,7 +102,6 @@ func main() {
 		}
 	}
 	mask := createBlurMask(maskSize)
-
 	for i := 0; i < b.Dx(); i++ {
 		for j := 0; j < b.Dy(); j++ {
 			blurPix(src, dst, mask, maskSize, i, j)
@@ -111,5 +113,4 @@ func main() {
 		panic(err)
 	}
 	jpeg.Encode(f, dst, nil)
-
 }
