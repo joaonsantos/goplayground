@@ -33,7 +33,7 @@ go build ./cmd/http
 ```
 
 The build infomation available looks like this:
-```sh
+```bash
 go	go1.23.0
 path	example/cmd/http
 mod	example	(devel)	
