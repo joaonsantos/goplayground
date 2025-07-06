@@ -18,7 +18,7 @@ $ make
 
 This will build the go program into a webassebly wasm file and serve the required files on `http://localhost:8080`.
 
-Tested on Go 1.19.
+Tested on Go 1.24.
 
 # Example
 

@@ -1,3 +1,3 @@
 module github.com/joaonsantos/goplayground/wasm
 
-go 1.18
+go 1.24
