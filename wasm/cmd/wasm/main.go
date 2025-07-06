@@ -4,7 +4,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"strconv"
 	"syscall/js"
 	"time"
 
@@ -14,13 +14,9 @@ import (
 const (
 	cellSize     = 20 // px
 	padding      = 2  // px
-	worldColSize = 32 // cells
-	worldRowSize = 16 // cells
+	worldColSize = 36 // cells
+	worldRowSize = 18 // cells
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 func main() {
 	worldState := glife.NewWorldState(worldColSize, worldRowSize)
@@ -28,6 +24,10 @@ func main() {
 
 	doc := js.Global().Get("document")
 	canvas := doc.Call("getElementById", "world")
+	fullWidth := (worldColSize + padding) * cellSize
+	fullHeight := (worldRowSize + padding) * cellSize
+	canvas.Set("width", strconv.Itoa(fullWidth))
+	canvas.Set("height", strconv.Itoa(fullHeight))
 	ctx := canvas.Call("getContext", "2d")
 
 	var renderFrame js.Func
@@ -79,6 +79,6 @@ func main() {
 	// logic update loop
 	for {
 		worldState = glife.WorldTick(worldState, worldColSize, worldRowSize)
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(260 * time.Millisecond)
 	}
 }
